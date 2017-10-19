@@ -1,6 +1,6 @@
 #/bin/sh
 if [ "$(id -u)" != "0" ]; then
-	echo "You need to run this script You need to run this script with superuser privileges."
+	echo "You need to run this script with superuser privileges."
 	echo "Aborting.."
 	exit 1
 fi
