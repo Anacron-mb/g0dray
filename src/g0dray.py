@@ -17,7 +17,7 @@ actiongroup.add_argument('-inc', metavar='percent', help='Increases brightness b
 actiongroup.add_argument('-dec', metavar='percent', help='Decreases brightness by the specified amount.')
 actiongroup.add_argument('-get',action='store_true',help='Print out the current backlight brightness of each output with such a control. The brightness is represented as a percentage of the maximum brightness supported. ')
 parser.add_argument('-help',help='Print out a summary of the usage and exit.',action='help')
-parser.add_argument('--version', action='version', version='%(prog)s 0.2')
+parser.add_argument('--version', action='version', version='%(prog)s 0.3')
 
 args = parser.parse_args()
 
