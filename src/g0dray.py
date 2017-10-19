@@ -5,6 +5,9 @@ import subprocess
 import sys
 import argparse
 
+MAX_BRIGHTNESS = 150    # Highest brightness (there is no cap with xrandr)
+MIN_BRIGHTNESS = 0      # Lowest brightness (0 means pitch black)
+
 # Parser for command line options
 parser = argparse.ArgumentParser()
 actiongroup = parser.add_mutually_exclusive_group() 
@@ -29,23 +32,46 @@ commandToGetCurrentBrightness = "xrandr --verbose | grep Brightness | cut -f 2 -
 brightness = subprocess.check_output(commandToGetCurrentBrightness, shell=True)
 brightness = brightness.rstrip()
 
+# Check first if no arguments are supplied
+if len(sys.argv) == 1:
+    print "No arguments supplied. Use -h or --help or -help to get more information."
+
+
 if args.set:
     newbrightness = float(args.set)/100.00
+    
+    if newbrightness < (MIN_BRIGHTNESS/100.00):
+        newbrightness = MIN_BRIGHTNESS/100.00
+
+    if newbrightness > (MAX_BRIGHTNESS/100.00):
+        newbrightness = MAX_BRIGHTNESS/100.00
+
     os.system("xrandr --output " + screen + " --brightness " + str(newbrightness))
+    
     sys.exit(1)
 
 if args.inc:
     newbrightness = float(brightness) + float(args.inc)/100.00
-    os.system("xrandr --output " + screen + " --brightness " + str(newbrightness))
+    
+    if not newbrightness > (MAX_BRIGHTNESS/100.00):
+        os.system("xrandr --output " + screen + " --brightness " + str(newbrightness))
+    else:
+        os.system("xrandr --output " + screen + " --brightness " + str(MAX_BRIGHTNESS/100.00))
+
     sys.exit(1)
 
 if args.dec:
     newbrightness = float(brightness) - float(args.dec)/100.00
-    if newbrightness < 0.1:
-        newbrightness = 0.1
-    os.system("xrandr --output " + screen + " --brightness " + str(newbrightness))
+    
+    if not newbrightness < (MIN_BRIGHTNESS/100.00):
+        os.system("xrandr --output " + screen + " --brightness " + str(newbrightness))
+    else:
+        os.system("xrandr --output " + screen + " --brightness " + str(MIN_BRIGHTNESS/100.00))
+    
     sys.exit(1)
 
 if args.get:
     percentbrightness = float(brightness)*100.00
     print "Current brightness is set at: " + str(percentbrightness)
+
+    sys.exit(1)
