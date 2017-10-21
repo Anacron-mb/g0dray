@@ -9,6 +9,7 @@ echo "Installing.......please wait...."
 mkdir /opt/g0dray.py
 cp -r * /opt/g0dray.py/
 chmod +x /opt/g0dray.py/src/g0dray.py
+rm /opt/g0dray.py/install.sh
 ln -sr /opt/g0dray.py/src/g0dray.py /usr/local/bin/g0dray.py
 echo "Install finished with no errors."
 

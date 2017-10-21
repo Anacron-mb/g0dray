@@ -1,7 +1,7 @@
 # g0dray.py
 Author: Michele 'an4cr0n' Biondi
 
-Version: 0.5
+Version: 0.6
 
 Description: Emulates xbacklight in software using xrandr.
 
@@ -38,6 +38,11 @@ Clone this repo and inside cloned directory run the installer like this:
 ```
 sudo sh install.sh
 ```
+## Uninstall
+Go to /opt/g0dray.py/ and inside the folder type:
+```
+sudo sh uninstall.sh
+```
 
 ## Work in progress (future releases)
 - [x] Initial basic functions: get,set,inc,dec
@@ -46,7 +51,7 @@ sudo sh install.sh
   - [x] source
   - [ ] .deb package
   - [ ] .rpm package
-- [ ] Uninstaller
+- [x] Uninstaller
 - [x] Advanced functions
   - [x] time
   - [x] steps
