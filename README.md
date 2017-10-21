@@ -1,7 +1,7 @@
 # g0dray.py
 Author: Michele 'an4cr0n' Biondi
 
-Version: 0.3
+Version: 0.4
 
 Description: Emulates xbacklight in software using xrandr.
 
@@ -15,7 +15,7 @@ Use cases:
 
 ## Usage
 ```
-g0dray.py [options]
+g0dray.py -h # Full list of options
 ```
 
 ## Install
@@ -33,5 +33,5 @@ sudo sh install.sh
   - [ ] .rpm package
 - [ ] Uninstaller
 - [ ] Advanced functions
-  - [ ] time
+  - [x] time
   - [ ] steps
