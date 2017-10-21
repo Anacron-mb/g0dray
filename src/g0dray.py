@@ -6,7 +6,7 @@ import sys
 import argparse
 import time
 
-MAX_BRIGHTNESS = 150    # Highest brightness (there is no cap with xrandr)
+MAX_BRIGHTNESS = 100    # Highest brightness (there is no cap with xrandr)
 MIN_BRIGHTNESS = 0      # Lowest brightness (0 means pitch black)
 DEFAULT_TIME = 0.2      # Default -time value, don't change if you want a true clone of xbacklight
 DEFAULT_STEPS = 20      # Default steps, leave 20 if you want a true clone of xbacklight 
@@ -20,10 +20,10 @@ actiongroup.add_argument('-inc', metavar='percent', help='Increases brightness b
 actiongroup.add_argument('-dec', metavar='percent', help='Decreases brightness by the specified amount.')
 actiongroup.add_argument('-get',action='store_true',help='Print out the current backlight brightness of each output with such a control. The brightness is represented as a percentage of the maximum brightness supported. ')
 
-parser.add_argument('-steps', metavar='number0', help='Number of steps to take while fading. Default is 20')
+parser.add_argument('-steps', metavar='number', help='Number of steps to take while fading. Default is 20')
 parser.add_argument('-time', metavar='milliseconds', help='Length of time to spend fading the backlight between old and new value. Default is 200.')
 parser.add_argument('-help',help='Print out a summary of the usage and exit.',action='help')
-parser.add_argument('--version', action='version', version='%(prog)s 0.4')
+parser.add_argument('--version', action='version', version='%(prog)s 0.5')
 
 args = parser.parse_args()
 
@@ -46,61 +46,59 @@ stepsToTake = DEFAULT_STEPS
 
 if args.steps:
     stepsToTake = int(args.steps)
+    if stepsToTake > 35:
+        print "A lot of steps can slow down the application, thus making -time unpredictable even if it set.." 
 
 if args.time:
     timeBetweenChanges = float(args.time)/1000.000  # Convert to milliseconds
 
-if args.set:
-    newbrightness = float(args.set)/100.00
-    
+# Function used to change brightness in every case
+def set_brightness(newbrightness):
+
     if newbrightness < (MIN_BRIGHTNESS/100.00):
+        print "Cannot set brightness to " + str(newbrightness*100) + ",the value is too low."
+        print "Setting brightness to " + str(MIN_BRIGHTNESS) + ". "
         newbrightness = MIN_BRIGHTNESS/100.00
 
     if newbrightness > (MAX_BRIGHTNESS/100.00):
+        print "Cannot set brightness to " + str(newbrightness*100) + ",the value is too high."
+        print "Setting brightness to " + str(MAX_BRIGHTNESS) + ". "
         newbrightness = MAX_BRIGHTNESS/100.00
-    
+
     if newbrightness == brightness:
         sys.exit(1)
     elif newbrightness < brightness:
         brightdifference = brightness - newbrightness
         for step in range(1,stepsToTake+1):
             time.sleep(timeBetweenChanges/stepsToTake)
-            print (timeBetweenChanges/stepsToTake) * 1000
             os.system("xrandr --output " + screen + " --brightness " + str(brightness - ((brightdifference/stepsToTake)*step)))
+
     else:
         brightdifference = newbrightness - brightness
         for step in range(1,stepsToTake+1):
             time.sleep(timeBetweenChanges/stepsToTake)
-            print (timeBetweenChanges/stepsToTake)*1000
             os.system("xrandr --output " + screen + " --brightness " + str(brightness + ((brightdifference/stepsToTake)*step)))
             
     sys.exit(1)
 
+if args.set:
+    
+    brightnessToSet = float(args.set)/100.00
+    set_brightness(brightnessToSet)
+    
+
 if args.inc:
-    newbrightness = float(brightness) + float(args.inc)/100.00
     
-    if not newbrightness > (MAX_BRIGHTNESS/100.00):
-        time.sleep(timeBetweenChanges)
-        os.system("xrandr --output " + screen + " --brightness " + str(newbrightness))
-    else:
-        time.sleep(timeBetweenChanges)
-        os.system("xrandr --output " + screen + " --brightness " + str(MAX_BRIGHTNESS/100.00))
-
-    sys.exit(1)
-
+    brightnessToSet = float(brightness) + float(args.inc)/100.00
+    set_brightness(brightnessToSet)
+    
 if args.dec:
-    newbrightness = float(brightness) - float(args.dec)/100.00
     
-    if not newbrightness < (MIN_BRIGHTNESS/100.00):
-        time.sleep(timeBetweenChanges)
-        os.system("xrandr --output " + screen + " --brightness " + str(newbrightness))
-    else:
-        time.sleep(timeBetweenChanges)
-        os.system("xrandr --output " + screen + " --brightness " + str(MIN_BRIGHTNESS/100.00))
-    
-    sys.exit(1)
+    brightnessToSet = float(brightness) - float(args.dec)/100.00
+    set_brightness(brightnessToSet)    
 
 if args.get:
+    
     percentbrightness = float(brightness)*100.00
     print "Current brightness is set at: " + str(percentbrightness)
 
