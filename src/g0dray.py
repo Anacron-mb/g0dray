@@ -23,7 +23,7 @@ actiongroup.add_argument('-get',action='store_true',help='Print out the current 
 parser.add_argument('-steps', metavar='number', help='Number of steps to take while fading. Default is 20')
 parser.add_argument('-time', metavar='milliseconds', help='Length of time to spend fading the backlight between old and new value. Default is 200.')
 parser.add_argument('-help',help='Print out a summary of the usage and exit.',action='help')
-parser.add_argument('--version', action='version', version='%(prog)s 0.6')
+parser.add_argument('--version', action='version', version='%(prog)s 0.7.1')
 
 args = parser.parse_args()
 
@@ -45,12 +45,21 @@ timeBetweenChanges = DEFAULT_TIME
 stepsToTake = DEFAULT_STEPS
 
 if args.steps:
-    stepsToTake = int(args.steps)
+    try:
+        stepsToTake = int(args.steps)
+    except ValueError:
+        print args.steps + " is not a valid number. Aborting."
+        sys.exit(2)
+
     if stepsToTake > 35:
         print "A lot of steps can slow down the application, thus making -time unpredictable even if it set.." 
 
 if args.time:
-    timeBetweenChanges = float(args.time)/1000.000  # Convert to milliseconds
+    try:
+        timeBetweenChanges = float(args.time)/1000.000  # Convert to milliseconds
+    except ValueError:
+        print args.time + " is not a valid type of time (milliseconds). Aborting"
+        sys.exit(2)
 
 # Function used to change brightness in every case
 def set_brightness(newbrightness):
@@ -66,7 +75,7 @@ def set_brightness(newbrightness):
         newbrightness = MAX_BRIGHTNESS/100.00
 
     if newbrightness == brightness:
-        sys.exit(1)
+        sys.exit(0)
     elif newbrightness < brightness:
         brightdifference = brightness - newbrightness
         for step in range(1,stepsToTake+1):
@@ -79,22 +88,35 @@ def set_brightness(newbrightness):
             time.sleep(timeBetweenChanges/stepsToTake)
             os.system("xrandr --output " + screen + " --brightness " + str(brightness + ((brightdifference/stepsToTake)*step)))
             
-    sys.exit(1)
+    sys.exit(0)
 
 if args.set:
     
-    brightnessToSet = float(args.set)/100.00
+    try:
+        brightnessToSet = float(args.set)/100.00
+    except ValueError:
+        print args.set + " is not a valid percent. Aborting."
+        sys.exit(2)
+        
     set_brightness(brightnessToSet)
     
 
 if args.inc:
-    
-    brightnessToSet = float(brightness) + float(args.inc)/100.00
+    try:
+        brightnessToSet = float(brightness) + float(args.inc)/100.00
+    except ValueError:
+        print args.inc + " is not a valid percent. Aborting."
+        sys.exit(2)
+
     set_brightness(brightnessToSet)
     
 if args.dec:
-    
-    brightnessToSet = float(brightness) - float(args.dec)/100.00
+    try:
+        brightnessToSet = float(brightness) - float(args.dec)/100.00
+    except ValueError:
+        print args.dec + " is not a valid percent. Aborting."
+        sys.exit(2)
+
     set_brightness(brightnessToSet)    
 
 if args.get:
@@ -102,6 +124,6 @@ if args.get:
     percentbrightness = float(brightness)*100.00
     print "Current brightness is set at: " + str(percentbrightness)
 
-    sys.exit(1)
+    sys.exit(0)
 
-sys.exit(1)     # Exits the right way
+sys.exit(0)     # Exits the right way

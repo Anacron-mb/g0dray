@@ -1,7 +1,7 @@
 # g0dray.py
 Author: Michele 'an4cr0n' Biondi
 
-Version: 0.6
+Version: 0.7.1
 
 Description: Emulates xbacklight in software using xrandr.
 
