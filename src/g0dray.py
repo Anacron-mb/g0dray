@@ -23,7 +23,7 @@ actiongroup.add_argument('-get',action='store_true',help='Print out the current 
 parser.add_argument('-steps', metavar='number', help='Number of steps to take while fading. Default is 20')
 parser.add_argument('-time', metavar='milliseconds', help='Length of time to spend fading the backlight between old and new value. Default is 200.')
 parser.add_argument('-help',help='Print out a summary of the usage and exit.',action='help')
-parser.add_argument('--version', action='version', version='%(prog)s 0.7.1')
+parser.add_argument('--version', action='version', version='%(prog)s 0.8')
 
 args = parser.parse_args()
 
