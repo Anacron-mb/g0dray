@@ -6,7 +6,7 @@ Version: 0.8
 Description: Emulates xbacklight in software using xrandr.
 
 Use cases:
-  - Xbacklight doesn't work and responds like this (e.g. On Debian 'Stretch' and i3wm) 
+  - Xbacklight doesn't work and responds with an output like this (e.g. On Debian 'Stretch' and i3wm) 
     ```
     $ xbacklight
     No outputs have backlight property
@@ -49,15 +49,3 @@ Go to /opt/g0dray.py/ and inside the folder type:
 ```
 sudo sh uninstall.sh
 ```
-
-## Work in progress (future releases)
-- [x] Initial basic functions: get,set,inc,dec
-- [x] Adding check for actions
-- [ ] Installer
-  - [x] source
-  - [x] .deb package
-  - [ ] .rpm package
-- [x] Uninstaller
-- [x] Advanced functions
-  - [x] time
-  - [x] steps
